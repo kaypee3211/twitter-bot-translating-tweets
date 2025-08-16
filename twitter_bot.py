@@ -7,6 +7,7 @@ import re
 from dotenv import load_dotenv
 import os
 import requests
+import tempfile
 
 load_dotenv()
 
@@ -80,7 +81,7 @@ try:
         for m in tweety.includes["media"]:
             media_map[m.media_key] = m
 
-   for tweet in reversed(tweety.data):
+    for tweet in reversed(tweety.data):
         print("Tweet ID:", tweet.id)
         print("Treść:", tweet.text)
         cursor.execute(
@@ -96,6 +97,10 @@ try:
             last_tweet_text = tweet.text
 
             last_tweet_text = re.sub(r"https://t\.co/\S+", "", last_tweet_text).strip()
+            # usunięcie flag (Regional Indicator Symbols)
+            import emoji
+
+            last_tweet_text = emoji.replace_emoji(last_tweet_text, replace='')
 
             media_url = None
             if getattr(tweet, "attachments", None) and "media_keys" in tweet.attachments:
@@ -126,9 +131,11 @@ try:
                     resp = requests.get(media_url)
                     if resp.status_code == 200:
                         image_data = resp.content
-                        with open(".venv/temp.jpg", "wb") as f:
-                            f.write(image_data)
-                        media = api_v1.media_upload("temp.jpg")
+                        with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmpfile:
+                            tmpfile.write(image_data)
+                            temp_path = tmpfile.name
+
+                        media = api_v1.media_upload(temp_path)
                         media_id = media.media_id
 
                 #checking if last_tweet_id already in database
