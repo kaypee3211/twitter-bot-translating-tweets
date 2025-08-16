@@ -80,7 +80,7 @@ try:
         for m in tweety.includes["media"]:
             media_map[m.media_key] = m
 
-    for tweet in tweety.data:
+   for tweet in reversed(tweety.data):
         print("Tweet ID:", tweet.id)
         print("Treść:", tweet.text)
         cursor.execute(
