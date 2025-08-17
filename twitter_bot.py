@@ -71,7 +71,7 @@ try:
 
     tweety = client.get_users_tweets(
         id = user_id_index,
-        max_results = 8,
+        max_results = 5,
         expansions=["attachments.media_keys"],
         media_fields=["url"]
     )
