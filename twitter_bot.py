@@ -97,7 +97,7 @@ try:
             last_tweet_text = tweet.text
 
             last_tweet_text = re.sub(r"https://t\.co/\S+", "", last_tweet_text).strip()
-            # usunięcie flag (Regional Indicator Symbols)
+            
             import emoji
 
             last_tweet_text = emoji.replace_emoji(last_tweet_text, replace='')
