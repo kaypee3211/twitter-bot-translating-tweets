@@ -166,5 +166,3 @@ finally:
     cursor.close()
     conn.close()
 
-
-#if u want better translation u need to get chatgpt api
